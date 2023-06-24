@@ -76,7 +76,7 @@ class MediaService implements MediaServiceInterface {
     final croppedFile = await ImageCropper().cropImage(
       sourcePath: pickedFile.path,
       aspectRatio: isCropRequired
-          ? const CropAspectRatio(ratioX: 1.2, ratioY: 1.5)
+          ? const CropAspectRatio(ratioX: 16, ratioY: 9)
           : null,
       cropStyle: CropStyle.rectangle,
       aspectRatioPresets: Platform.isAndroid

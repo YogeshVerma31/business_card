@@ -46,7 +46,7 @@ dependencies:
   intl:
   image_picker: ^0.8.6+1
   permission_handler: ^10.2.0
-  file_picker: ^4.5.0
+  file_picker: ^5.3.0
   mime:
   get_it: ^7.2.0
   image_cropper: ^2.0.0

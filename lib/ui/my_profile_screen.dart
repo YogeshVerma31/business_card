@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MyProfileScreen extends StatefulWidget {
-  const MyProfileScreen({Key? key}) : super(key: key);
+  bool isProfileCompleted;
+  MyProfileScreen({Key? key,required this.isProfileCompleted}) : super(key: key);
 
   @override
   State<MyProfileScreen> createState() => _MyProfileScreenState();
@@ -25,23 +26,27 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(title: const Text("My Profile"), actions: [
-          InkWell(
-            onTap: () async {
-              var result = await Get.to(ImageScreen(
-                businessModelList:
-                    controller.myProfileData.value.business_images!,
-              ));
-              if (result != null) {
-                controller.fetchMyProfile();
-              }
-            },
-            child: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Icon(Icons.add),
-            ),
-          )
-        ]),
+        appBar: AppBar(
+            title: const Text("My Profile"),
+            leading: widget.isProfileCompleted==true? InkWell(
+                onTap: () => Get.back(), child: const Icon(Icons.arrow_back)):SizedBox.shrink(),
+            actions: [
+              InkWell(
+                onTap: () async {
+                  var result = await Get.to(ImageScreen(
+                    businessModelList:
+                        controller.myProfileData.value.business_images!,
+                  ));
+                  if (result != null) {
+                    controller.fetchMyProfile();
+                  }
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(Icons.add),
+                ),
+              ),
+            ]),
         body: Obx(
           () => controller.isLoading.value == true
               ? const Center(child: CircularProgressIndicator())
@@ -66,7 +71,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                controller.myProfileData.value.name!,
+                                controller.myProfileData.value.name ?? '',
                                 style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 20,
@@ -74,7 +79,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                               ),
                               Text(controller.myProfileData.value.mobile_num
                                   .toString()),
-                              Text(controller.myProfileData.value.email!)
+                              Text(controller.myProfileData.value.email ?? '')
                             ],
                           )
                         ],
@@ -87,10 +92,15 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                         child: InkWell(
                           onTap: () async {
                             var result = await Get.to(UpdateProfileScreen(
-                              cityValue: controller.myProfileData.value.city,
-                              stateValue: controller.myProfileData.value.state,
-                              address: controller.myProfileData.value.address,
-                              desc: controller.myProfileData.value.description,
+                              cityValue:
+                                  controller.myProfileData.value.city ?? '',
+                              stateValue:
+                                  controller.myProfileData.value.state ?? '',
+                              address:
+                                  controller.myProfileData.value.address ?? '',
+                              desc:
+                                  controller.myProfileData.value.description ??
+                                      '',
                             ));
                             if (result != null) {
                               controller.fetchMyProfile();
@@ -143,7 +153,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                 fontSize: 18, fontWeight: FontWeight.w500),
                           ),
                           Text(
-                            controller.myProfileData.value.city.toString(),
+                            controller.myProfileData.value.city ?? '',
                             style: const TextStyle(
                               fontSize: 18,
                             ),
@@ -161,7 +171,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                 fontSize: 18, fontWeight: FontWeight.w500),
                           ),
                           Text(
-                            controller.myProfileData.value.address.toString(),
+                            controller.myProfileData.value.address ?? '',
                             style: const TextStyle(
                               fontSize: 18,
                             ),
@@ -179,8 +189,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                 fontSize: 18, fontWeight: FontWeight.w500),
                           ),
                           Text(
-                            controller.myProfileData.value.description
-                                .toString(),
+                            controller.myProfileData.value.description ?? '',
                             style: const TextStyle(
                               fontSize: 18,
                             ),

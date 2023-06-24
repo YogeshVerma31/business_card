@@ -5,7 +5,6 @@ import 'package:flutter/services.dart' show rootBundle;
 
 import '../data/model/select_status_model.dart' as StatusModel;
 
-
 class SelectState extends StatefulWidget {
   final ValueChanged<String> onCountryChanged;
   final ValueChanged<String> onStateChanged;
@@ -16,11 +15,11 @@ class SelectState extends StatefulWidget {
 
   const SelectState(
       {Key? key,
-        required this.onCountryChanged,
-        required this.onStateChanged,
-        required this.onCityChanged,
-        this.style,
-        this.dropdownColor})
+      required this.onCountryChanged,
+      required this.onStateChanged,
+      required this.onCityChanged,
+      this.style,
+      this.dropdownColor})
       : super(key: key);
 
   @override
@@ -43,8 +42,7 @@ class _SelectStateState extends State<SelectState> {
   }
 
   Future getResponse() async {
-    var res = await rootBundle.loadString(
-        'assets/country.json');
+    var res = await rootBundle.loadString('assets/country.json');
     return jsonDecode(res);
   }
 
@@ -132,7 +130,6 @@ class _SelectStateState extends State<SelectState> {
   }
 
   void _onSelectedState(String value) {
-
     if (!mounted) return;
     setState(() {
       _selectedCity = "Choose City";
@@ -157,12 +154,11 @@ class _SelectStateState extends State<SelectState> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey,width: .5),
-            borderRadius: BorderRadius.circular(10)
-          ),
-          margin: EdgeInsets.all(10),
+              border: Border.all(color: Colors.grey, width: .5),
+              borderRadius: BorderRadius.circular(10)),
+          margin: const EdgeInsets.all(10),
           child: DropdownButton<String>(
             dropdownColor: widget.dropdownColor,
             isExpanded: true,
@@ -180,9 +176,8 @@ class _SelectStateState extends State<SelectState> {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey,width: .5),
-              borderRadius: BorderRadius.circular(10)
-          ),
+              border: Border.all(color: Colors.grey, width: .5),
+              borderRadius: BorderRadius.circular(10)),
           margin: const EdgeInsets.all(10),
           child: DropdownButton<String>(
             dropdownColor: widget.dropdownColor,

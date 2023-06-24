@@ -23,9 +23,11 @@ class HomeController extends GetxController {
   var selectedCategoryUUid = '';
   var myProfileData = MyProfileModel().obs;
 
-
   businessCategoryUUid(String value) {
-    selectedCategoryUUid = categoriesData.value.data!.where((element) => element.name==value).first.uuid!;
+    selectedCategoryUUid = categoriesData.value.data!
+        .where((element) => element.name == value)
+        .first
+        .uuid!;
   }
 
   Future<void> fetchMyProfile() async {
@@ -35,16 +37,20 @@ class HomeController extends GetxController {
         '${APIEndpoint.baseApi}auth/checkprofile',
         'GET',
         headers: {
-          'Authorization': 'Token ' + SharedPreference().getString(AppConstants().authToken)
+          'Authorization':
+              'Token ' + SharedPreference().getString(AppConstants().authToken)
         },
       );
-      var result = _returnResponse(response, '${APIEndpoint.baseApi}auth/checkprofile');
+      var result =
+          _returnResponse(response, '${APIEndpoint.baseApi}auth/checkprofile');
       myProfileData.value = MyProfileModel.fromJson(result['data']);
-      if(myProfileData.value.is_profile_completed==true){
+      if (myProfileData.value.is_profile_completed == true) {
         fetchCategories();
         fetchBusiness('', '', '');
-      }else{
-        Get.to(MyProfileScreen());
+      } else {
+        Get.to(MyProfileScreen(
+          isProfileCompleted: false,
+        ));
       }
       print("object + $myProfileData");
       update();
@@ -56,7 +62,6 @@ class HomeController extends GetxController {
   }
 
   Future<void> fetchCategories() async {
-
     try {
       print('HTTP REQUEST => ${'${APIEndpoint.baseApi}content/categories'}');
       // print('HTTP REQUEST => ${request.body}');
@@ -65,12 +70,12 @@ class HomeController extends GetxController {
         'GET',
         headers: {
           'Authorization':
-          'Token ' + SharedPreference().getString(AppConstants().authToken)
+              'Token ' + SharedPreference().getString(AppConstants().authToken)
         },
       );
 
       var result =
-      _returnResponse(response, '${APIEndpoint.baseApi}content/categories');
+          _returnResponse(response, '${APIEndpoint.baseApi}content/categories');
       categoriesData.value = CategoriesModel.fromJson(result);
       selectCategories.value = categoriesData.value.data![0].name!;
       update();
@@ -81,8 +86,8 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> updateProfile(String state, String city, String address,
-      String description) async {
+  Future<void> updateProfile(
+      String state, String city, String address, String description) async {
     businessCategoryUUid(selectCategories.value);
     isLoading(true);
     try {
@@ -104,7 +109,7 @@ class HomeController extends GetxController {
       print('body-->${response.body}');
       print('requesttype-->${response.request!.method}');
       var result =
-      _returnResponse(response, '${APIEndpoint.baseApi}auth/updateprofile');
+          _returnResponse(response, '${APIEndpoint.baseApi}auth/updateprofile');
       isLoading(false);
       update();
     } on TimeoutException {
@@ -118,26 +123,23 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> fetchBusiness(String state, String city,
-      String businessCat) async {
+  Future<void> fetchBusiness(
+      String state, String city, String businessCat) async {
     try {
       print(
-          'HTTP REQUEST => ${'${APIEndpoint
-              .baseApi}auth/searchbusiness?state=$state&city=$city&category=$businessCat'}');
+          'HTTP REQUEST => ${'${APIEndpoint.baseApi}auth/searchbusiness?state=$state&city=$city&category=$businessCat'}');
       // print('HTTP REQUEST => ${request.body}');
       final response = await _client.request(
-        '${APIEndpoint
-            .baseApi}auth/searchbusiness?state=$state&city=$city&category=$businessCat',
+        '${APIEndpoint.baseApi}auth/searchbusiness?state=$state&city=$city&category=$businessCat',
         'GET',
         headers: {
           'Authorization':
-          'Token ' + SharedPreference().getString(AppConstants().authToken)
+              'Token ' + SharedPreference().getString(AppConstants().authToken)
         },
       );
 
       var result = _returnResponse(response,
-          '${APIEndpoint
-              .baseApi}auth/searchbusiness?state=$state&city=$city&category=$businessCat');
+          '${APIEndpoint.baseApi}auth/searchbusiness?state=$state&city=$city&category=$businessCat');
       business.value = result['data'];
       print("object + $business");
       update();
